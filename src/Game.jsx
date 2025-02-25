@@ -77,6 +77,11 @@ export default function Game () {
 
   }
 
+  function restartGame () {
+    setHistory([Array(9).fill(null)]);
+    setCurrentMove(0);
+  }
+
   const moves = history.map((squares, move) => {
     let description;
     if(move > 0) {
@@ -85,9 +90,17 @@ export default function Game () {
       description = 'Go to game start';
     }
 
+    if(move === history.length - 1){
+      const boardIsFull = currentSquares.every(square => square !== null);
+      if(boardIsFull){
+        description = 'Restart?'
+      }
+
+    }
+
     return (
     <li key={move}>
-      <button onClick={() => jumpTo(move)}>{description}</button>
+      <button onClick={() => move === history.length - 1 && currentSquares.every(square => square !== null) ? restartGame() : jumpTo(move)}>{description}</button>
     </li>
     );
 
